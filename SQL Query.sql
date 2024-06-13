@@ -23,7 +23,6 @@ ON pizza_types.pizza_type_id = pizzas.pizza_type_id
 ORDER BY pizzas.price DESC;
 -- Highest Priced Pizza is 35.95
 
-
 -- Que. Identify the most common pizza size ordered.
 SELECT TOP(1) pizzas.size, COUNT(order_details.order_details_id)
 as No_of_Pizzas_Ordered
@@ -32,7 +31,6 @@ ON pizzas.pizza_id = order_details.pizza_id
 GROUP BY pizzas.size
 ORDER BY No_of_Pizzas_Ordered DESC;
 -- Common Pizza size ordered is L and no. of orders is 18526
-
 
 --Que. List the top 5 most ordered pizza types along with their quantities.
 SELECT TOP(5) pizza_types.name, SUM(order_details.quantity)
@@ -46,7 +44,6 @@ ORDER BY Quantity DESC ;
 
 
 
--- Intermediate:
 -- Que. Join the necessary tables to find the total quantity of each pizza category ordered.
 SELECT pizza_types.category, SUM(order_details.quantity)
 AS Total_Quantity
@@ -88,7 +85,6 @@ ORDER BY Revanue DESC;
 
 
 
---Advanced:
 
 --Que. Calculate the percentage contribution of each pizza type to total revenue.
 SELECT pizza_types.category AS Category,
@@ -101,7 +97,6 @@ JOIN pizza_types
 ON pizza_types.pizza_type_id = pizzas.pizza_type_id
 GROUP BY pizza_types.category;
 
-
 -- Que. Analyze the cumulative revenue generated over time.
 SELECT date AS Date,
 SUM(Revanue) over (order by date) AS Cumulative_Price
@@ -113,12 +108,12 @@ JOIN pizzas
 ON pizzas.pizza_id = order_details.pizza_id
 GROUP BY orders.date) AS Sales;
 
-
 --Que. Determine the top 3 most ordered pizza types based on revenue for each pizza category.
-SELECT pizza_types.name, pizza_types.category,
+SELECT TOP(3) pizza_types.name, pizza_types.category,
 SUM(order_details.quantity * pizzas.price) AS Revanue
 FROM (order_details JOIN pizzas
 ON order_details.pizza_id = pizzas.pizza_id)
 JOIN pizza_types
 ON pizzas.pizza_type_id = pizza_types.pizza_type_id
-GROUP BY pizza_types.category, pizza_types.name;
+GROUP BY pizza_types.category, pizza_types.name
+ORDER BY Revanue DESC;
